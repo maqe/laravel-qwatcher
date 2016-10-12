@@ -1,0 +1,35 @@
+{
+    "name": "maqe/laravel-qwatcher",
+    "description": "A full-lifecycle queue jobs watcher for Laravel 5.1+",
+    "keywords": ["queue", "job", "laravel", "watcher"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MAQE team",
+            "email": "hello@maqe.com",
+            "homepage": "https://www.maqe.com/",
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "laravel/framework": "^5.1.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "~4.0",
+        "mockery/mockery": "^0.9.*",
+    },
+    "autoload": {
+        "classmap": [
+            "src/",
+            "database/"
+        ],
+        "psr-4": {
+            "Maqe\\Qwatcher\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/TestCase.php"
+        ]
+    }
+}
