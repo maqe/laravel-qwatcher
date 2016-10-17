@@ -24,7 +24,6 @@
     "autoload": {
         "classmap": [
             "src/",
-            "database/",
             "tests/TestCase.php"
         ],
         "psr-4": {
