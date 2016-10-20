@@ -2,6 +2,7 @@
 
 use Queue;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Log;
 
 class QwatcherServiceProvider extends ServiceProvider
 {
@@ -12,13 +13,17 @@ class QwatcherServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Queue::after(function ($connection, $job, $data) {
-            \Maqe\Qwatcher\Facades\Qwatch::succeed($connection, $job, $data);
+        Queue::before(function ($job) {
+            \Maqe\Qwatcher\Facades\Qwatch::process($job->job->getJobId(), $job->job);
         });
 
-        Queue::failing(function ($connection, $job, $data) {
-            \Maqe\Qwatcher\Facades\Qwatch::failed($connection, $job, $data);
+        Queue::after(function ($job) {
+            \Maqe\Qwatcher\Facades\Qwatch::succeed($job->job->getJobId(), $job->job);
         });
+
+        // Queue::failing(function ($job) {
+        //     \Maqe\Qwatcher\Facades\Qwatch::failed($job->job->getJobId(), $job->job);
+        // });
     }
 
     /**
