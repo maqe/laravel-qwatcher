@@ -15,16 +15,15 @@ class CreateTracksTable extends Migration
     {
         Schema::create('tracks', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('queue')->comment('The name of Queue this job is in');
-            $table->string('connection')->comment('connection of queue to track queue driver');
-            $table->integer('priority');
-            $table->integer('attemp')->comment('Provides for retries, but still fail ');
-            $table->string('handler')->comment('string of the object that will do work');
-            $table->text('parameter')->comment('parameters of handler');
+            $table->string('driver');
+            $table->string('queue');
+            $table->string('payload');
+            $table->integer('attempts');
             $table->timestamp('created_at');
             $table->timestamp('processing_at')->nallable();
             $table->timestamp('success_at')->nallable();
             $table->timestamp('failed_at')->nallable();
+        });
         });
     }
 
