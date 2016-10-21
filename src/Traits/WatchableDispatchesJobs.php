@@ -2,7 +2,9 @@
 
 namespace Maqe\Qwatcher\Traits;
 
+use DB;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Maqe\Qwatcher\Tracks\CreateTracks;
 
 trait WatchableDispatchesJobs
 {
@@ -12,11 +14,19 @@ trait WatchableDispatchesJobs
      * @param  mixed  $job
      * @return mixed
      */
-    protected function dispatch($job)
+    public function dispatch($job)
     {
         \Maqe\Qwatcher\Facades\Qwatch::queued($job);
 
-        return app(Dispatcher::class)->dispatch($job);
+        $id = app(Dispatcher::class)->dispatch($job);
+
+        if (env('QUEUE_DRIVER') == 'database') {
+            (new CreateTracks($id));
+        }
+
+        return $id;
+
+        // return app(Dispatcher::class)->dispatch($job);
     }
 
     /**
@@ -28,7 +38,7 @@ trait WatchableDispatchesJobs
     public function dispatchNow($job)
     {
         \Maqe\Qwatcher\Facades\Qwatch::queued($job);
-        
+
         return app(Dispatcher::class)->dispatchNow($job);
     }
 }

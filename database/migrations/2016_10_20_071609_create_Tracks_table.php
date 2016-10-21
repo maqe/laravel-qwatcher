@@ -16,6 +16,7 @@ class CreateTracksTable extends Migration
         Schema::create('tracks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('driver');
+            $table->integer('queue_id');
             $table->string('queue');
             $table->string('payload');
             $table->integer('attempts');
@@ -23,7 +24,6 @@ class CreateTracksTable extends Migration
             $table->timestamp('processing_at')->nallable();
             $table->timestamp('success_at')->nallable();
             $table->timestamp('failed_at')->nallable();
-        });
         });
     }
 

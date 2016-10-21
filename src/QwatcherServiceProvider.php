@@ -2,6 +2,8 @@
 
 use Queue;
 use Illuminate\Support\ServiceProvider;
+use Maqe\Qwatcher\Tracks\SuccessTracks;
+use Illuminate\Support\Facades\Log;
 
 class QwatcherServiceProvider extends ServiceProvider
 {
@@ -14,6 +16,10 @@ class QwatcherServiceProvider extends ServiceProvider
     {
         Queue::after(function ($connection, $job, $data) {
             \Maqe\Qwatcher\Facades\Qwatch::succeed($connection, $job, $data);
+
+            if (env('QUEUE_DRIVER') == 'database') {
+                (new SuccessTracks($job->getJobId()));
+            }
         });
 
         Queue::failing(function ($connection, $job, $data) {
