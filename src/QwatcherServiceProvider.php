@@ -18,7 +18,7 @@ class QwatcherServiceProvider extends ServiceProvider
             \Maqe\Qwatcher\Facades\Qwatch::succeed($connection, $job, $data);
 
             if (env('QUEUE_DRIVER') == 'database') {
-                (new SuccessTracks($job->getJobId()));
+                (new SuccessTracks($job));
             }
         });
 

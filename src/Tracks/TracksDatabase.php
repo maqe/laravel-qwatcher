@@ -9,11 +9,15 @@ abstract class TracksDatabase
 {
     protected $id;
 
+    protected $job;
+
     protected $status;
 
-    public function __construct($id, $status = StatusType::CREATE)
+    public function __construct($id, $job = null, $status = StatusType::CREATE)
     {
         $this->id = $id;
+
+        $this->job = $job;
 
         $this->status = $status;
 
@@ -30,13 +34,13 @@ abstract class TracksDatabase
                 break;
 
             case StatusType::PROCESS:
-                return $this->update($this->id, StatusType::PROCESS);
+                return $this->update($this->job->getJobId(), StatusType::PROCESS);
                 break;
             case StatusType::SUCCEED:
-                return $this->update($this->id, StatusType::SUCCEED);
+                return $this->update($this->job->getJobId(), StatusType::SUCCEED);
                 break;
             case StatusType::FAILED:
-                return $this->update($this->id, StatusType::FAILED);
+                return $this->update($this->job->getJobId(), StatusType::FAILED);
                 break;
 
             default:
@@ -49,10 +53,10 @@ abstract class TracksDatabase
     {
         return [
             'driver' => 'database',
-            'queue_id' => $job->getJobId(),
-            'queue' => $job->getQueue(),
-            'payload' => $job->getRaw(),
-            'attempts' => $job->attempts(),
+            'queue_id' => $job->id,
+            'queue' => $job->queue,
+            'payload' => $job->payload,
+            'attempts' => $job->attempts,
             'created_at' => Carbon::now()
         ];
     }
@@ -68,7 +72,7 @@ abstract class TracksDatabase
         }
     }
 
-    public function create($job)
+    protected function create($job)
     {
         return Tracks::create($this->prepareRecord($job))->id;
     }

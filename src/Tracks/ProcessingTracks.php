@@ -4,8 +4,8 @@ use Maqe\Qwatcher\Tracks\Enums\StatusType;
 
 class ProcessingTracks extends TracksDatabase
 {
-    public function __construct($id)
+    public function __construct($job)
     {
-        parent::__construct($id, StatusType::PROCESS);
+        parent::__construct(0, $job, StatusType::PROCESS);
     }
 }

@@ -6,6 +6,6 @@ class CreateTracks extends TracksDatabase
 {
     public function __construct($id)
     {
-        parent::__construct($id, StatusType::CREATE);
+        parent::__construct($id, null, StatusType::CREATE);
     }
 }
