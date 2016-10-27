@@ -5,7 +5,7 @@ use DB;
 use Maqe\Qwatcher\Tracks;
 use Maqe\Qwatcher\Tracks\Enums\StatusType;
 
-abstract class TracksDatabase
+public class TracksDatabase
 {
     protected $id;
 

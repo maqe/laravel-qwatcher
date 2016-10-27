@@ -1,4 +1,4 @@
-<?php namespace Maqe\Qwatcher;
+<?php namespace Maqe\Qwatcher\Tracks;
 
 use Illuminate\Database\Eloquent\Model;
 
