@@ -1,5 +1,7 @@
 <?php namespace Maqe\Qwatcher\Tracks;
 
+use Maqe\Qwatcher\Tracks\Enums\StatusType;
+
 class ProcessingTracks extends TracksAbstract
 {
     public function __construct($job)

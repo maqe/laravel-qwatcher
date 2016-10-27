@@ -13,15 +13,15 @@ class QwatcherServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Queue::before(function ($connection, $job, $data) {
-            \Maqe\Qwatcher\Facades\Qwatch::queued($job);
+        Queue::before(function ($job) {
+            \Maqe\Qwatcher\Facades\Qwatch::queued($job->job);
         });
 
-        Queue::after(function ($connection, $job, $data) {
-            \Maqe\Qwatcher\Facades\Qwatch::succeed($connection, $job, $data);
+        Queue::after(function ($job) {
+            \Maqe\Qwatcher\Facades\Qwatch::succeed($job->job);
         });
 
-        Queue::failing(function ($connection, $job, $data) {
+        Queue::failing(function ($job) {
             \Maqe\Qwatcher\Facades\Qwatch::failed($connection, $job, $data);
         });
     }

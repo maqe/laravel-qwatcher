@@ -14,12 +14,12 @@ class Qwatcher
         (new CreateTracks($job));
     }
 
-    public function succeed($connection, $job, $data)
+    public function succeed($job)
     {
         (new SuccessTracks($job));
     }
 
-    public function failed($connection, $job, $data)
+    public function failed($job)
     {
         (new FailedTracks($job));
     }
