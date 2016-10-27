@@ -17,7 +17,6 @@ class CreateTracksTable extends Migration
             $table->increments('id');
             $table->string('driver');
             $table->integer('queue_id');
-            $table->string('queue');
             $table->string('payload');
             $table->integer('attempts');
             $table->timestamp('created_at');

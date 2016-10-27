@@ -2,10 +2,15 @@
 
 use Maqe\Qwatcher\Tracks\Enums\StatusType;
 
-class SuccessTracks extends TracksDatabase
+class SuccessTracks extends TracksAbstract
 {
     public function __construct($job)
     {
-        parent::__construct(0, $job, StatusType::SUCCEED);
+        $this->pushToTracks($job);
+    }
+
+    public function pushToTracks($job)
+    {
+        $this->update($job, StatusType::SUCCESS);
     }
 }

@@ -16,17 +16,7 @@ trait WatchableDispatchesJobs
      */
     public function dispatch($job)
     {
-        \Maqe\Qwatcher\Facades\Qwatch::queued($job);
-
-        $id = app(Dispatcher::class)->dispatch($job);
-
-        if (env('QUEUE_DRIVER') == 'database') {
-            (new CreateTracks($id));
-        }
-
-        return $id;
-
-        // return app(Dispatcher::class)->dispatch($job);
+        return app(Dispatcher::class)->dispatch($job);
     }
 
     /**

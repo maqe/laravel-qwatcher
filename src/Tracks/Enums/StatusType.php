@@ -4,7 +4,7 @@ class StatusType
 {
     const CREATE = 'created';
     const PROCESS = 'processing';
-    const SUCCEED = 'success';
+    const SUCCESS = 'success';
     const FAILED = 'failed';
 
 }
