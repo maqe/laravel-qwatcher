@@ -11,16 +11,8 @@ class Tracks extends Model
     ];
 
     protected $dates = [
-        'created_at', 'processing_at', 'success_at', 'failed_at'
+        'queue_at', 'process_at', 'success_at', 'failed_at'
     ];
 
-    public function setUpdatedAtAttribute($value)
-    {
-        // to Disable updated_at
-    }
-
-    public function getUpdatedAtColumn()
-    {
-        return null; // to Disable updated_at
-    }
+    public $timestamps = false;
 }

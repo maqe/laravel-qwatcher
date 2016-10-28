@@ -4,13 +4,13 @@ use Maqe\Qwatcher\Tracks\Enums\StatusType;
 
 class CreateTracks extends TracksAbstract
 {
-    public function __construct($job)
+    public function __construct($id, $job = NULL)
     {
-        return $this->pushToTracks($job);
+        return $this->pushToTracks($id, $job);
     }
 
-    public function pushToTracks($job)
+    public function pushToTracks($id, $job = NULL)
     {
-        return $this->create($job);
+        return $this->create($id, $job);
     }
 }

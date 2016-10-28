@@ -1,16 +1,17 @@
 <?php namespace Maqe\Qwatcher\Tracks;
 
+use Illuminate\Queue\Queue;
 use Carbon\Carbon;
 use Maqe\Qwatcher\Tracks\Enums\StatusType;
 
-abstract class TracksAbstract
+abstract class TracksAbstract extends Queue
 {
     /**
      * Push job to tracks table
      *
      * @return mixed
      */
-    abstract public function pushToTracks($job);
+    abstract public function pushToTracks($id, $job = NULL);
 
     /**
      * Create tracks record from job
@@ -18,9 +19,9 @@ abstract class TracksAbstract
      * @param  mixed    $job        The queue job object
      * @return integer  $id         The new tracks id
      */
-    protected function create($job)
+    protected function create($id, $job = NULL)
     {
-        return Tracks::create($this->prepareRecord($job))->id;
+        return Tracks::create($this->prepareRecord($id, $job))->id;
     }
 
     /**
@@ -30,9 +31,9 @@ abstract class TracksAbstract
      * @param  enum     $status     The status tracks type
      * @return boolean|mixed        The update result
      */
-    protected function update($id, $status)
+    protected function update($id, $job, $status)
     {
-        return Tracks::where('queue_id', $id)->update(["{$status}_at" => Carbon::now()]);
+        return Tracks::where('queue_id', $id)->update(['attempts' => $job->attempts(), "{$status}_at" => Carbon::now()]);
     }
 
     /**
@@ -41,14 +42,14 @@ abstract class TracksAbstract
      * @param  mixed $job           The queue job object
      * @return array                The array for input to database
      */
-    protected function prepareRecord($job)
+    protected function prepareRecord($id, $job)
     {
         return [
             'driver' => config('qwatcher.driver'),
-            'queue_id' => $job->getJobId(),
-            'payload' => $job->getRawBody(),
-            'attempts' => $job->attempts(),
-            'created_at' => Carbon::now()
+            'queue_id' => $id,
+            'payload' => $this->createPayload($job),
+            'attempts' => 0,
+            'queue_at' => Carbon::now()
         ];
     }
 }

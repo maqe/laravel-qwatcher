@@ -9,18 +9,23 @@ class Qwatcher
 {
     public function __construct() {}
 
-    public function queued($job)
+    public function queued($id, $job)
     {
-        (new CreateTracks($job));
+        (new CreateTracks($id, $job));
     }
 
-    public function succeed($job)
+    public function process($id, $job)
     {
-        (new SuccessTracks($job));
+        (new CreateTracks($id, $job));
     }
 
-    public function failed($job)
+    public function succeed($id, $job)
     {
-        (new FailedTracks($job));
+        (new SuccessTracks($id, $job));
+    }
+
+    public function failed($id, $job)
+    {
+        (new FailedTracks($id, $job));
     }
 }

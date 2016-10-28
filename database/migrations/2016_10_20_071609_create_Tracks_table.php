@@ -19,10 +19,10 @@ class CreateTracksTable extends Migration
             $table->integer('queue_id');
             $table->string('payload');
             $table->integer('attempts');
-            $table->timestamp('created_at');
-            $table->timestamp('processing_at')->nallable();
-            $table->timestamp('success_at')->nallable();
-            $table->timestamp('failed_at')->nallable();
+            $table->timestamp('queue_at');
+            $table->timestamp('process_at');
+            $table->timestamp('success_at');
+            $table->timestamp('failed_at');
         });
     }
 

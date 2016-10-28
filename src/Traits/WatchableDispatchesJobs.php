@@ -16,7 +16,11 @@ trait WatchableDispatchesJobs
      */
     public function dispatch($job)
     {
-        return app(Dispatcher::class)->dispatch($job);
+        $id = app(Dispatcher::class)->dispatch($job);
+
+        \Maqe\Qwatcher\Facades\Qwatch::process($id, $job);
+
+        return $id;
     }
 
     /**
