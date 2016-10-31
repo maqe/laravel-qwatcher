@@ -8,6 +8,7 @@ class Tracks extends Model
 
     protected $fillable = [
         'driver', 'queue_id', 'queue', 'payload', 'attempts',
+        'queue_at', 'process_at', 'success_at', 'failed_at'
     ];
 
     protected $dates = [

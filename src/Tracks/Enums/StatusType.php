@@ -2,9 +2,9 @@
 
 class StatusType
 {
-    const CREATE = 'created';
-    const PROCESS = 'processing';
-    const SUCCESS = 'success';
+    const QUEUE = 'queue';
+    const PROCESS = 'process';
+    const SUCCEED = 'succeed';
     const FAILED = 'failed';
 
 }

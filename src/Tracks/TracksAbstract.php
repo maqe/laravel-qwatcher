@@ -11,7 +11,7 @@ abstract class TracksAbstract extends Queue
      *
      * @return mixed
      */
-    abstract public function pushToTracks($id, $job = NULL);
+    abstract public function pushToTracks($id, $job = null);
 
     /**
      * Create tracks record from job
@@ -19,7 +19,7 @@ abstract class TracksAbstract extends Queue
      * @param  mixed    $job        The queue job object
      * @return integer  $id         The new tracks id
      */
-    protected function create($id, $job = NULL)
+    protected function create($id, $job = null)
     {
         return Tracks::create($this->prepareRecord($id, $job))->id;
     }

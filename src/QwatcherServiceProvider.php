@@ -21,9 +21,9 @@ class QwatcherServiceProvider extends ServiceProvider
             \Maqe\Qwatcher\Facades\Qwatch::succeed($job->job->getJobId(), $job->job);
         });
 
-        Queue::failing(function ($job) {
-            \Maqe\Qwatcher\Facades\Qwatch::failed($job->job->getJobId(), $job->job);
-        });
+        // Queue::failing(function ($job) {
+        //     \Maqe\Qwatcher\Facades\Qwatch::failed($job->job->getJobId(), $job->job);
+        // });
     }
 
     /**

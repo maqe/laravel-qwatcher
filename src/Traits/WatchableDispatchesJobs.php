@@ -4,7 +4,6 @@ namespace Maqe\Qwatcher\Traits;
 
 use DB;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Maqe\Qwatcher\Tracks\CreateTracks;
 
 trait WatchableDispatchesJobs
 {
@@ -18,7 +17,7 @@ trait WatchableDispatchesJobs
     {
         $id = app(Dispatcher::class)->dispatch($job);
 
-        \Maqe\Qwatcher\Facades\Qwatch::process($id, $job);
+        \Maqe\Qwatcher\Facades\Qwatch::queued($id, $job);
 
         return $id;
     }

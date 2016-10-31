@@ -21,7 +21,7 @@ class CreateTracksTable extends Migration
             $table->integer('attempts');
             $table->timestamp('queue_at');
             $table->timestamp('process_at');
-            $table->timestamp('success_at');
+            $table->timestamp('succeed_at');
             $table->timestamp('failed_at');
         });
     }
