@@ -17,13 +17,13 @@ class CreateTracksTable extends Migration
             $table->increments('id');
             $table->string('driver');
             $table->integer('queue_id');
-            $table->string('queue');
-            $table->string('payload');
+            $table->text('payload');
             $table->integer('attempts');
-            $table->timestamp('created_at');
-            $table->timestamp('processing_at')->nallable();
-            $table->timestamp('success_at')->nallable();
-            $table->timestamp('failed_at')->nallable();
+            $table->text('meta')->nullable();
+            $table->timestamp('queue_at');
+            $table->timestamp('process_at');
+            $table->timestamp('succeed_at');
+            $table->timestamp('failed_at');
         });
     }
 
