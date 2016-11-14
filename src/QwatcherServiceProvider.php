@@ -24,6 +24,11 @@ class QwatcherServiceProvider extends ServiceProvider
         Queue::failing(function ($connection, $job, $data) {
             Qwatch::tracks(new FailedTracks($job->getJobId(), $job));
         });
+
+        /**
+         * Assgin namespace's view
+         */
+        $this->loadViewsFrom(__DIR__.'/views', 'tracks');
     }
 
     /**
@@ -50,6 +55,11 @@ class QwatcherServiceProvider extends ServiceProvider
         $this->app->bind('Qwatch', function () {
             return (new Qwatcher);
         });
+
+        /**
+         * Inblude Route
+         */
+        include __DIR__.'/routes.php';
 
         /**
         * Register artisan Commands
