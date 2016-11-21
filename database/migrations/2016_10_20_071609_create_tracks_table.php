@@ -20,10 +20,10 @@ class CreateTracksTable extends Migration
             $table->text('payload');
             $table->integer('attempts');
             $table->text('meta')->nullable();
-            $table->timestamp('queue_at');
-            $table->timestamp('process_at');
-            $table->timestamp('succeed_at');
-            $table->timestamp('failed_at');
+            $table->timestamp('queue_at')->nullable();
+            $table->timestamp('process_at')->nullable();
+            $table->timestamp('succeed_at')->nullable();
+            $table->timestamp('failed_at')->nullable();
         });
     }
 
