@@ -8,27 +8,22 @@ use Maqe\Qwatcher\Tracks\TracksInterface;
 use Maqe\Qwatcher\Tracks\Tracks;
 use Carbon\Carbon;
 
-class Qwatcher
+class Qwatcher extends QwatchersAbstract
 {
     protected $statusable = [];
 
+    protected $queryable = ['sort' 'limit'];
+
+    protected $sortColumn = 'id';
+
     protected $sortOrder = 'asc';
+
+    protected $sortable = ['id', 'driver', 'queue_at', 'process_at', 'success_at', 'failed_at'];
+
+    protected $limit = null;
 
     public function __construct() {
         $this->statusable = StatusType::statsTypes();
-    }
-
-    /**
-     * Added sort order to $this->sortOrder string, use with builder
-     *
-     * @param  string $sortBy The sort string
-     * @return $this
-     */
-    public function orderBy($sortBy)
-    {
-        $this->sortOrder = $this->filterSortBy($sortBy);
-
-        return $this;
     }
 
     /**
@@ -43,13 +38,45 @@ class Qwatcher
     }
 
     /**
+     * Added sort order to $this->sortOrder string, use with builder
+     *
+     * @param  string $sortBy The sort string
+     * @return $this
+     */
+    public function sortBy($sortColumn = 'id', $sortOrder = 'asc')
+    {
+
+        $this->sortColumn = $this->filterSortOrderColumn($sortColumn);
+        $this->sortOrder = $this->filterSortOrder($sortOrder);
+
+        return $this;
+    }
+
+    /**
+     * Set limit record to show
+     *
+     * @param  integer $limit   The number of record to retrieve
+     * @return $this
+     */
+    public function limit($limit)
+    {
+        $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
      * Get the list of the queue track
      *
      * @return collection
      */
     public function all()
     {
-        return $this->transforms(Tracks::orderBy('id', $this->sortOrder)->get());
+        $builder = new Tracks;
+
+        $this->queryApplies($builder);
+
+        return $this->transforms($builder->get());
     }
 
     /**
@@ -60,7 +87,11 @@ class Qwatcher
      */
     public function paginate($perPage)
     {
-        return $this->transformPaginator(Tracks::orderBy('id', $this->sortOrder)->paginate($perPage));
+        $builder = new Tracks;
+
+        $this->queryApplies($builder);
+
+        return $this->transforms($builder->paginate($perPage));
     }
 
     /**
@@ -95,7 +126,7 @@ class Qwatcher
             $this->{$methodName}($builder);
         }
 
-        $builder->orderBy('id', $this->sortOrder);
+        $this->queryApplies($builder);
 
         if (!is_null($per_page)) {
             return $this->transformPaginator($builder->paginate($per_page));
@@ -116,7 +147,7 @@ class Qwatcher
         $collecName = str_replace('\\', '%',$name);
         $condition = "`tracks`.`meta` LIKE '%\"job_name\":\"{$collecName}\"%'";
 
-        $builder->orderBy('id', $this->sortOrder);
+        $this->queryApplies($builder);
 
         if (!is_null($per_page)) {
             return $this->transformPaginator(Tracks::whereRaw($condition)->paginate($per_page));
@@ -267,13 +298,40 @@ class Qwatcher
     }
 
     /**
+     * Filter sort order column string
+     *
+     * @param  string $sortColumn  The sort order column string
+     * @return stirng
+     */
+    protected function filterSortColumn($sortColumn)
+    {
+        return in_array($sortColumn, $this->sortable) ? $sortColumn : 'id';
+    }
+
+    /**
      * Filter sort order string, allowed only asc, desc
      *
      * @param  string $sortOrder The sort order string
      * @return stirng
      */
-    protected function filterSortBy($sortOrder)
+    protected function filterSortOrder($sortOrder)
     {
         return in_array($sortOrder, ['asc', 'desc']) ? $sortOrder : 'asc';
+    }
+
+    /**
+     * Apply limit if $this->limit is not null
+     *
+     * @param  Builder $builder The tracks builder
+     * @return Builder          The query builder with take applied.
+     */
+    protected function applyLimit(Builder $builder)
+    {
+        return (!is_null($this->limit)) ? $builder->take($this->limit) : $builder;
+    }
+
+    protected function applySort(Builder $builder)
+    {
+        return $builder->orderBy($this->sortColumn, $this->sortOrder);
     }
 }
