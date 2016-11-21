@@ -49,7 +49,7 @@ abstract class TracksAbstract extends Queue
     protected function prepareRecord($id, $job, array $meta = [])
     {
         return [
-            'driver' => config('queue.default'),
+            'driver' => env('QUEUE_DRIVER', 'sync'),
             'queue_id' => $id,
             'payload' => $this->createPayload($job),
             'attempts' => 0,
