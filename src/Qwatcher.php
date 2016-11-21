@@ -1,7 +1,6 @@
 <?php namespace Maqe\Qwatcher;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Maqe\Qwatcher\Tracks\Enums\StatusType;
 use Maqe\Qwatcher\Tracks\TracksInterface;
@@ -27,7 +26,7 @@ class Qwatcher extends QwatchersAbstract
     }
 
     /**
-     * Insert or update Track table depand on TracksInterface sub class
+     * Insert or update Track table depend on TracksInterface sub class (Adapter)
      *
      * @param  TracksInterface $tracks      Sub class that implements TracksInterface
      * @return mixed
@@ -46,7 +45,7 @@ class Qwatcher extends QwatchersAbstract
     public function sortBy($sortColumn = 'id', $sortOrder = 'asc')
     {
 
-        $this->sortColumn = $this->filterSortOrderColumn($sortColumn);
+        $this->sortColumn = $this->filterSortColumn($sortColumn);
         $this->sortOrder = $this->filterSortOrder($sortOrder);
 
         return $this;
@@ -74,6 +73,8 @@ class Qwatcher extends QwatchersAbstract
     {
         $builder = new Tracks;
 
+        $builder = $builder->newQuery();
+
         $this->queryApplies($builder);
 
         return $this->transforms($builder->get());
@@ -88,6 +89,8 @@ class Qwatcher extends QwatchersAbstract
     public function paginate($perPage)
     {
         $builder = new Tracks;
+
+        $builder = $builder->newQuery();
 
         $this->queryApplies($builder);
 
