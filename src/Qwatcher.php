@@ -12,7 +12,7 @@ class Qwatcher extends QwatchersAbstract
 {
     protected $statusable = [];
 
-    protected $queryable = ['sort' 'limit'];
+    protected $queryable = ['sort', 'limit'];
 
     protected $sortColumn = 'id';
 
@@ -146,13 +146,14 @@ class Qwatcher extends QwatchersAbstract
     {
         $collecName = str_replace('\\', '%',$name);
         $condition = "`tracks`.`meta` LIKE '%\"job_name\":\"{$collecName}\"%'";
+        $builder = Tracks::whereRaw($condition);
 
         $this->queryApplies($builder);
 
         if (!is_null($per_page)) {
-            return $this->transformPaginator(Tracks::whereRaw($condition)->paginate($per_page));
+            return $this->transformPaginator($builder->paginate($per_page));
         } else {
-            return $this->transforms(Tracks::whereRaw($condition)->get());
+            return $this->transforms($builder->get());
         }
     }
 
