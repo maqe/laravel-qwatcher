@@ -12,8 +12,23 @@ class Qwatcher
 {
     protected $statusable = [];
 
+    protected $sortOrder = 'asc';
+
     public function __construct() {
         $this->statusable = StatusType::statsTypes();
+    }
+
+    /**
+     * Added sort order to $this->sortOrder string, use with builder
+     *
+     * @param  string $sortBy The sort string
+     * @return $this
+     */
+    public function orderBy($sortBy)
+    {
+        $this->sortOrder = $this->filterSortBy($sortBy);
+
+        return $this;
     }
 
     /**
@@ -34,7 +49,7 @@ class Qwatcher
      */
     public function all()
     {
-        return $this->transforms(Tracks::all());
+        return $this->transforms(Tracks::orderBy('id', $this->sortOrder)->get());
     }
 
     /**
@@ -45,7 +60,7 @@ class Qwatcher
      */
     public function paginate($perPage)
     {
-        return $this->transformPaginator(Tracks::paginate($perPage));
+        return $this->transformPaginator(Tracks::orderBy('id', $this->sortOrder)->paginate($perPage));
     }
 
     /**
@@ -72,13 +87,15 @@ class Qwatcher
             throw new \InvalidArgumentException('"'.$status.'" is not allowed in status type');
         }
 
-        $builder = Tracks::where("queue_at", '>', '0000-00-00 00:00:00');
+        $builder = Tracks::whereNotNull('queue_at');
 
         $methodName = 'filterBy'.ucfirst($status);
 
         if (method_exists($this, $methodName)) {
             $this->{$methodName}($builder);
         }
+
+        $builder->orderBy('id', $this->sortOrder);
 
         if (!is_null($per_page)) {
             return $this->transformPaginator($builder->paginate($per_page));
@@ -99,6 +116,8 @@ class Qwatcher
         $collecName = str_replace('\\', '%',$name);
         $condition = "`tracks`.`meta` LIKE '%\"job_name\":\"{$collecName}\"%'";
 
+        $builder->orderBy('id', $this->sortOrder);
+
         if (!is_null($per_page)) {
             return $this->transformPaginator(Tracks::whereRaw($condition)->paginate($per_page));
         } else {
@@ -117,7 +136,7 @@ class Qwatcher
         $sequentialStatus = ['failed_at', 'succeed_at', 'process_at', 'queue_at'];
 
         foreach ($sequentialStatus as $status) {
-            if ($track->{$status} > '0000-00-00 00:00:00') {
+            if (!is_null($track->{$status})) {
                 return substr($status, 0, -3);
             }
         }
@@ -137,7 +156,7 @@ class Qwatcher
         $sequentialStatus = ['failed_at', 'succeed_at', 'process_at', 'queue_at'];
 
         foreach ($sequentialStatus as $status) {
-            if ($track->{$status} > '0000-00-00 00:00:00') {
+            if (!is_null($track->{$status})) {
                 return $track->{$status};
             }
         }
@@ -156,7 +175,7 @@ class Qwatcher
     {
         $track->meta = ($track->meta) ? json_decode($track->meta) : null;
         $track->status = ucfirst(Qwatcher::getTrackStatus($track));
-        $track->statusTime = Carbon::parse(Qwatcher::getTrackStatusTime($track))->format('H:i - d/m/Y');
+        $track->statusTime = Carbon::parse(Qwatcher::getTrackStatusTime($track))->format('H:i:s - d/m/Y');
 
         return $track;
     }
@@ -197,9 +216,10 @@ class Qwatcher
      */
     protected function filterByQueue(Builder $builder)
     {
-        return $builder->where("process_at", '=', '0000-00-00 00:00:00')
-            ->where('succeed_at', '=', '0000-00-00 00:00:00')
-            ->where('failed_at', '=', '0000-00-00 00:00:00');
+        return $builder
+            ->whereNull('process_at')
+            ->whereNull('succeed_at')
+            ->whereNull('failed_at');
     }
 
     /**
@@ -211,9 +231,10 @@ class Qwatcher
      */
     protected function filterByProcess(Builder $builder)
     {
-        return $builder->where("process_at", '>', '0000-00-00 00:00:00')
-            ->where('succeed_at', '=', '0000-00-00 00:00:00')
-            ->where('failed_at', '=', '0000-00-00 00:00:00');
+        return $builder
+            ->whereNotNull('process_at')
+            ->whereNull('succeed_at')
+            ->whereNull('failed_at');
     }
 
     /**
@@ -227,8 +248,8 @@ class Qwatcher
     protected function filterBySucceed(Builder $builder)
     {
         return $builder
-            ->where('succeed_at', '>', '0000-00-00 00:00:00')
-            ->where('failed_at', '=', '0000-00-00 00:00:00');
+            ->whereNotNull('succeed_at')
+            ->whereNull('failed_at');
     }
 
     /**
@@ -240,7 +261,19 @@ class Qwatcher
      */
     protected function filterByFailed(Builder $builder)
     {
-        return $builder->where('succeed_at', '=', '0000-00-00 00:00:00')
-            ->where('failed_at', '>', '0000-00-00 00:00:00');
+        return $builder
+            ->whereNotNull('failed_at');
+            ->whereNull('succeed_at')
+    }
+
+    /**
+     * Filter sort order string, allowed only asc, desc
+     *
+     * @param  string $sortOrder The sort order string
+     * @return stirng
+     */
+    protected function filterSortBy($sortOrder)
+    {
+        return in_array($sortOrder, ['asc', 'desc']) ? $sortOrder : 'asc';
     }
 }
