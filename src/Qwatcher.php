@@ -262,8 +262,8 @@ class Qwatcher
     protected function filterByFailed(Builder $builder)
     {
         return $builder
-            ->whereNotNull('failed_at');
-            ->whereNull('succeed_at')
+            ->whereNotNull('failed_at')
+            ->whereNull('succeed_at');
     }
 
     /**
