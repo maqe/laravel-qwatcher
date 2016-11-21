@@ -41,12 +41,6 @@ class QwatcherServiceProvider extends ServiceProvider
         * publish migrations
         */
         $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], 'migrations');
-        $this->publishes([__DIR__ . '/../config/qwatcher.php' => config_path('qwatcher.php')], 'config');
-
-        /**
-        * merge config
-        */
-        $this->mergeConfigFrom(__DIR__ . '/../config/qwatcher.php', 'qwatcher');
 
         /**
         * Register Facade
@@ -54,14 +48,6 @@ class QwatcherServiceProvider extends ServiceProvider
         $this->app->bind('Qwatch', function () {
             return (new Qwatcher);
         });
-
-        /**
-        * Register artisan Commands
-        */
-        // $this->commands([
-        //     \Maqe\Qwatcher\Commands\SomeCommand1::class,
-        //     \Maqe\Qwatcher\Commands\SomeCommand2::class
-        // ]);
     }
 
     /**
