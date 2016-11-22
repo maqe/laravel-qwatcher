@@ -16,7 +16,7 @@ class CreateTracksTable extends Migration
         Schema::create('tracks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('driver');
-            $table->integer('queue_id');
+            $table->string('queue_id');
             $table->text('payload');
             $table->integer('attempts');
             $table->string('job_name');
