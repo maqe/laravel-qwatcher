@@ -17,7 +17,7 @@ class Qwatcher extends QwatchersAbstract
 
     protected $sortOrder = 'asc';
 
-    protected $sortable = ['id', 'driver', 'queue_at', 'process_at', 'success_at', 'failed_at'];
+    protected $sortable = ['id', 'driver', 'queue_at', 'job_name', 'process_at', 'success_at', 'failed_at'];
 
     protected $limit = null;
 
@@ -148,7 +148,7 @@ class Qwatcher extends QwatchersAbstract
     public function getByJobName($name, $per_page = null)
     {
         $collecName = str_replace('\\', '%',$name);
-        $condition = "`tracks`.`meta` LIKE '%\"job_name\":\"{$collecName}\"%'";
+        $condition = "`tracks`.`job_name` LIKE '%\"{$collecName}\"%'";
         $builder = Tracks::whereRaw($condition);
 
         $this->queryApplies($builder);

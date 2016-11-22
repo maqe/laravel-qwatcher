@@ -49,7 +49,7 @@
                         <strong>Driver:</strong> {{ $track->driver }}
                     </div>
                     <div class="col-7">
-                        <strong>Job name:</strong> {{ $track->meta->job_name }}
+                        <strong>Job name:</strong> {{ $track->job_name }}
                     </div>
                     <div class="col-2">
                         <strong>Attempts:</strong> {{ $track->attempts }}

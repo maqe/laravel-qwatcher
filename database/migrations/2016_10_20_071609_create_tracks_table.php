@@ -19,6 +19,7 @@ class CreateTracksTable extends Migration
             $table->integer('queue_id');
             $table->text('payload');
             $table->integer('attempts');
+            $table->string('job_name');
             $table->text('meta')->nullable();
             $table->timestamp('queue_at')->nullable();
             $table->timestamp('process_at')->nullable();

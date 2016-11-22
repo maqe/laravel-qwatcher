@@ -53,6 +53,7 @@ abstract class TracksAbstract extends Queue
             'queue_id' => $id,
             'payload' => $this->createPayload($job),
             'attempts' => 0,
+            'job_name' => get_class($job),
             'meta' => json_encode($this->setMetaData($job, $meta)),
             'queue_at' => Carbon::now()
         ];

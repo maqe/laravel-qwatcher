@@ -10,7 +10,7 @@
     <strong>Queue id:</strong> {{ $track->queue_id }}
 </p>
 <p>
-    <strong>Job name:</strong> {{ $track->meta->job_name }}
+    <strong>Job name:</strong> {{ $track->job_name }}
 </p>
 <p>
     <strong>Attempts:</strong> {{ $track->attempts }}
