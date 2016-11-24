@@ -1,12 +1,12 @@
 <?php namespace Maqe\Qwatcher;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Maqe\Qwatcher\Tracks\Enums\StatusType;
 use Maqe\Qwatcher\Tracks\TracksInterface;
 use Maqe\Qwatcher\Tracks\Tracks;
 use Maqe\Qwatcher\Tracks\Transformers\TrackTransformerInterface;
-use Carbon\Carbon;
 
 class Qwatcher extends QwatchersAbstract
 {
@@ -163,44 +163,6 @@ class Qwatcher extends QwatchersAbstract
         } else {
             return $this->trackTransformer->transforms($builder->get());
         }
-    }
-
-    /**
-     * Get current Status as text, tracking by sequential of status datetime
-     *
-     * @param  $track        The track object
-     * @return string
-     */
-    public function getTrackStatus($track)
-    {
-        $sequentialStatus = ['failed_at', 'succeed_at', 'process_at', 'queue_at'];
-
-        foreach ($sequentialStatus as $status) {
-            if (!is_null($track->{$status})) {
-                return substr($status, 0, -3);
-            }
-        }
-
-        throw new Exception("Can't find the right column to track the Qwatcher", 1);
-    }
-
-    /**
-     * Get current Status prias text, tracking by sequential of status datetime
-     *
-     * @param  $track        The track object
-     * @return string
-     */
-    public function getTrackStatusTime($track)
-    {
-        $sequentialStatus = ['failed_at', 'succeed_at', 'process_at', 'queue_at'];
-
-        foreach ($sequentialStatus as $status) {
-            if (!is_null($track->{$status})) {
-                return $track->{$status};
-            }
-        }
-
-        throw new Exception("Can't find the right column to track the Qwatcher", 1);
     }
 
     /**
