@@ -5,7 +5,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Maqe\Qwatcher\Tracks\Enums\StatusType;
 use Maqe\Qwatcher\Tracks\TracksInterface;
 use Maqe\Qwatcher\Tracks\Tracks;
-use Maqe\Qwatcher\Tracks\Transforms\TrackTransformerInterface;
+use Maqe\Qwatcher\Tracks\Transformers\TrackTransformerInterface;
 use Carbon\Carbon;
 
 class Qwatcher extends QwatchersAbstract
@@ -24,9 +24,9 @@ class Qwatcher extends QwatchersAbstract
 
     protected $limit = null;
 
-    public function __construct(TrackTransformerInterface $trackTransformer)
+    public function __construct()
     {
-        $this->trackTransformer = $trackTransformer;
+        $this->trackTransformer = app(TrackTransformerInterface::class);
         $this->statusable = StatusType::statsTypes();
     }
 

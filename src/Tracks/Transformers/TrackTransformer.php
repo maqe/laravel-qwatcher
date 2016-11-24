@@ -1,6 +1,7 @@
-<?php namespace Maqe\Qwatcher\Tracks\Transforms;
+<?php namespace Maqe\Qwatcher\Tracks\Transformers;
 
 use Maqe\Qwatcher\Tracks\Tracks;
+use Maqe\Qwatcher\Tracks\Transformers\TrackTransformerInterface;
 
 class TrackTransformer implements TrackTransformerInterface
 {

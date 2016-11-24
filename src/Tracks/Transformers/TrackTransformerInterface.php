@@ -1,3 +1,3 @@
-<? namespace Maqe\Qwatcher\Tracks\Transforms;
+<?php namespace Maqe\Qwatcher\Tracks\Transformers;
 
 interface TrackTransformerInterface {};

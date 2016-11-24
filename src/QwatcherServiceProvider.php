@@ -1,6 +1,7 @@
 <?php namespace Maqe\Qwatcher;
 
 use Queue;
+use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Maqe\Qwatcher\Facades\Qwatch;
@@ -25,7 +26,8 @@ class QwatcherServiceProvider extends ServiceProvider
             Qwatch::tracks(new SucceedTracks($job->job->getJobId(), $job->job));
         });
 
-        Queue::failing(function ($job) {
+        Queue::failing(function (JobFailed $job) {
+            // dd($event);
             Qwatch::tracks(new FailedTracks($job->job->getJobId(), $job->job));
         });
 
@@ -66,6 +68,11 @@ class QwatcherServiceProvider extends ServiceProvider
         //     \Maqe\Qwatcher\Commands\SomeCommand1::class,
         //     \Maqe\Qwatcher\Commands\SomeCommand2::class
         // ]);
+
+        /**
+         * Register service provider interface
+         */
+        $this->app->bind('Maqe\Qwatcher\Tracks\Transformers\TrackTransformerInterface', 'Maqe\Qwatcher\Tracks\Transformers\TrackTransformer');
     }
 
     /**
