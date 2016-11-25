@@ -152,8 +152,8 @@ class Qwatcher extends QwatchersAbstract
      */
     public function getByJobName($name, $per_page = null)
     {
-        $collecName = str_replace('\\', '%',$name);
-        $condition = "`tracks`.`job_name` LIKE '%\"{$collecName}\"%'";
+        $collecName = strtolower(str_replace('_', '%',$name));
+        $condition = "`tracks`.`job_name` LIKE '%{$collecName}%'";
         $builder = Tracks::whereRaw($condition);
 
         $this->queryApplies($builder);

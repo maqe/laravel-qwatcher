@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\Collection;
 use Maqe\Qwatcher\Tracks\Tracks;
 use Maqe\Qwatcher\Tracks\Transformers\TrackTransformerInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 
 class TrackTransformer implements TrackTransformerInterface
@@ -41,12 +42,14 @@ class TrackTransformer implements TrackTransformerInterface
      * @param  Collection $tracks       The tracks collection
      * @return LengthAwarePaginator     The tracks LengthAwarePaginator after transform
      */
-    public function transformPaginator(Collection $tracks)
+    public function transformPaginator(LengthAwarePaginator $tracks)
     {
         $queryString = [];
         parse_str($_SERVER['QUERY_STRING'], $queryString);
+        $tracksCollecton = new Collection($tracks->items());
 
-        return new LengthAwarePaginator($this->transforms($tracks), $tracks->total(), $tracks->perPage(), $tracks->currentPage(), ['path' => \URL::current(), 'query' => $queryString]);
+
+        return new LengthAwarePaginator($this->transforms($tracksCollecton), $tracks->total(), $tracks->perPage(), $tracks->currentPage(), ['path' => \URL::current(), 'query' => $queryString]);
     }
 
     /**
