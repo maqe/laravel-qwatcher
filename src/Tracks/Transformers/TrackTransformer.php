@@ -4,7 +4,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Maqe\Qwatcher\Tracks\Tracks;
 use Maqe\Qwatcher\Tracks\Transformers\TrackTransformerInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Carbon\Carbon;
 
 class TrackTransformer implements TrackTransformerInterface
 {
@@ -17,8 +16,8 @@ class TrackTransformer implements TrackTransformerInterface
     public function transform(Tracks $track)
     {
         $track->meta = ($track->meta) ? json_decode($track->meta) : null;
-        $track->status = ucfirst($this->getTrackStatus($track));
-        $track->statusTime = Carbon::parse($this->getTrackStatusTime($track))->format('H:i:s - d/m/Y');
+        $track->status = $this->getTrackStatus($track);
+        $track->statusTime = $this->getTrackStatusTime($track);
 
         return $track;
     }
