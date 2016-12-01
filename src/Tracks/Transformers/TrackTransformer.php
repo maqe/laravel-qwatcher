@@ -7,6 +7,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class TrackTransformer implements TrackTransformerInterface
 {
+    protected $sequentialStatus = ['succeed_at', 'failed_at', 'process_at', 'queue_at'];
+
     /**
      * Transform records in tracks collection
      *
@@ -59,9 +61,7 @@ class TrackTransformer implements TrackTransformerInterface
      */
     public function getTrackStatus($track)
     {
-        $sequentialStatus = ['failed_at', 'succeed_at', 'process_at', 'queue_at'];
-
-        foreach ($sequentialStatus as $status) {
+        foreach ($this->sequentialStatus as $status) {
             if (!is_null($track->{$status})) {
                 return substr($status, 0, -3);
             }
@@ -78,9 +78,7 @@ class TrackTransformer implements TrackTransformerInterface
      */
     public function getTrackStatusTime($track)
     {
-        $sequentialStatus = ['failed_at', 'succeed_at', 'process_at', 'queue_at'];
-
-        foreach ($sequentialStatus as $status) {
+        foreach ($this->sequentialStatus as $status) {
             if (!is_null($track->{$status})) {
                 return $track->{$status};
             }
