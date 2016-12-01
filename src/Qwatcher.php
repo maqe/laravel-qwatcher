@@ -5,13 +5,14 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Maqe\Qwatcher\Tracks\Enums\StatusType;
 use Maqe\Qwatcher\Tracks\TracksInterface;
 use Maqe\Qwatcher\Tracks\Tracks;
-use Carbon\Carbon;
 
 class Qwatcher extends QwatchersAbstract
 {
     protected $statusable = [];
 
     protected $queryable = ['sort', 'limit'];
+
+    protected $sequentialStatus = ['succeed_at', 'failed_at', 'process_at', 'queue_at'];
 
     protected $sortColumn = 'id';
 
@@ -168,9 +169,7 @@ class Qwatcher extends QwatchersAbstract
      */
     public function getTrackStatus($track)
     {
-        $sequentialStatus = ['failed_at', 'succeed_at', 'process_at', 'queue_at'];
-
-        foreach ($sequentialStatus as $status) {
+        foreach ($this->sequentialStatus as $status) {
             if (!is_null($track->{$status})) {
                 return substr($status, 0, -3);
             }
@@ -188,9 +187,7 @@ class Qwatcher extends QwatchersAbstract
      */
     public function getTrackStatusTime($track)
     {
-        $sequentialStatus = ['failed_at', 'succeed_at', 'process_at', 'queue_at'];
-
-        foreach ($sequentialStatus as $status) {
+        foreach ($this->sequentialStatus as $status) {
             if (!is_null($track->{$status})) {
                 return $track->{$status};
             }
@@ -209,8 +206,8 @@ class Qwatcher extends QwatchersAbstract
     protected function transform($track)
     {
         $track->meta = ($track->meta) ? json_decode($track->meta) : null;
-        $track->status = ucfirst(Qwatcher::getTrackStatus($track));
-        $track->statusTime = Carbon::parse(Qwatcher::getTrackStatusTime($track))->format('H:i:s - d/m/Y');
+        $track->status = Qwatcher::getTrackStatus($track);
+        $track->statusTime = Qwatcher::getTrackStatusTime($track);
 
         return $track;
     }
