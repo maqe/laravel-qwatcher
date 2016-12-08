@@ -7,6 +7,8 @@ use Maqe\Qwatcher\Tracks\Enums\StatusType;
 use Maqe\Qwatcher\Tracks\TracksInterface;
 use Maqe\Qwatcher\Tracks\Tracks;
 use Maqe\Qwatcher\Tracks\Transformers\TrackTransformerInterface;
+use Exception;
+use InvalidArgumentException;
 
 class Qwatcher extends QwatchersAbstract
 {
