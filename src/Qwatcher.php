@@ -5,6 +5,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Maqe\Qwatcher\Tracks\Enums\StatusType;
 use Maqe\Qwatcher\Tracks\TracksInterface;
 use Maqe\Qwatcher\Tracks\Tracks;
+use Exception;
+use InvalidArgumentException;
 
 class Qwatcher extends QwatchersAbstract
 {
@@ -119,7 +121,7 @@ class Qwatcher extends QwatchersAbstract
     public function getByStatus($status, $per_page = null)
     {
         if(!in_array($status, $this->statusable)) {
-            throw new \InvalidArgumentException('"'.$status.'" is not allowed in status type');
+            throw new InvalidArgumentException('"'.$status.'" is not allowed in status type');
         }
 
         $builder = Tracks::whereNotNull('queue_at');
