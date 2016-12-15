@@ -35,4 +35,14 @@ trait WatchableDispatchesJobs
 
         return app(Dispatcher::class)->dispatchNow($job);
     }
+
+    /**
+     * Dispatch a job but not add then job to tracks table
+     *
+     * @param $job
+     * @return mixed
+     */
+    public function dispatchOnly($job) {
+        return app(Dispatcher::class)->dispatch($job);
+    }
 }
