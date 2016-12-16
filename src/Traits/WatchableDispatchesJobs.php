@@ -42,7 +42,8 @@ trait WatchableDispatchesJobs
      * @param $job
      * @return mixed
      */
-    public function dispatchOnly($job) {
+    public function dispatchOnly($job)
+    {
         return app(Dispatcher::class)->dispatch($job);
     }
 }
